@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  api:
+    image: python:3.11-slim
+    working_dir: /workspace
+    command: bash -lc "pip install -e . && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    environment:
+      VIDGEN_REDIS_URL: redis://redis:6379/0
+      VIDGEN_DATABASE_URL: sqlite:////workspace/vidgen.db
+      VIDGEN_STORAGE_ROOT: /workspace/storage
+      VIDGEN_TASK_MODE: celery
+      VIDGEN_USE_MOCK_PIPELINE: "true"
+    volumes:
+      - ./:/workspace
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  worker:
+    image: python:3.11-slim
+    working_dir: /workspace
+    command: bash -lc "pip install -e . && celery -A app.workers.celery_app worker --loglevel=INFO"
+    environment:
+      VIDGEN_REDIS_URL: redis://redis:6379/0
+      VIDGEN_DATABASE_URL: sqlite:////workspace/vidgen.db
+      VIDGEN_STORAGE_ROOT: /workspace/storage
+      VIDGEN_TASK_MODE: celery
+      VIDGEN_USE_MOCK_PIPELINE: "true"
+    volumes:
+      - ./:/workspace
+    depends_on:
+      - redis

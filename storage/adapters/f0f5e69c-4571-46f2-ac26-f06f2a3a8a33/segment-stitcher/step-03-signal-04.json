@@ -1,0 +1,19 @@
+{
+  "provider": "segment-stitcher",
+  "artifact_type": "transition_manifest",
+  "source": "ease-out",
+  "strength": 0.3,
+  "payload": {
+    "provider": "segment-stitcher",
+    "transition_type": "ease-out",
+    "strength": 0.3,
+    "boundary_frame": 23,
+    "blend_frames": 1
+  },
+  "manifest": {
+    "boundary_frame": 23,
+    "blend_frames": 1,
+    "transition_type": "ease-out",
+    "provider": "segment-stitcher"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "provider": "camera-motion-engine",
+  "artifact_type": "camera_manifest",
+  "source": "settle",
+  "strength": 0.45,
+  "payload": {
+    "provider": "camera-motion-engine",
+    "camera_path": "settle",
+    "camera_mode": "hero framing",
+    "intensity": 0.45,
+    "start_frame": 16,
+    "end_frame": 23
+  },
+  "trajectory": {
+    "path": "settle",
+    "start_frame": 16,
+    "end_frame": 23,
+    "intensity": 0.45,
+    "mode": "hero framing"
+  }
+}

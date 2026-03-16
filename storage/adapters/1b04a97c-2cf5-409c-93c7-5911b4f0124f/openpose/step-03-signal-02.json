@@ -1,0 +1,61 @@
+{
+  "provider": "openpose",
+  "artifact_type": "skeleton_sequence",
+  "source": "openpose-sparse",
+  "strength": 0.45,
+  "payload": {
+    "provider": "openpose",
+    "hint_type": "openpose-sparse",
+    "strength": 0.45,
+    "motion_label": "gentle settle",
+    "frame_window": [
+      8,
+      11
+    ]
+  },
+  "mode": "openpose-detector",
+  "pose_assets": [
+    {
+      "frame_index": 8,
+      "image_path": "storage\\adapters\\1b04a97c-2cf5-409c-93c7-5911b4f0124f\\openpose\\step-03-signal-02.png"
+    },
+    {
+      "frame_index": 9,
+      "image_path": "storage\\adapters\\1b04a97c-2cf5-409c-93c7-5911b4f0124f\\openpose\\step-03-signal-02.png"
+    },
+    {
+      "frame_index": 10,
+      "image_path": "storage\\adapters\\1b04a97c-2cf5-409c-93c7-5911b4f0124f\\openpose\\step-03-signal-02.png"
+    },
+    {
+      "frame_index": 11,
+      "image_path": "storage\\adapters\\1b04a97c-2cf5-409c-93c7-5911b4f0124f\\openpose\\step-03-signal-02.png"
+    }
+  ],
+  "skeleton_sequence": [
+    {
+      "frame_index": 8,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 9,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 10,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 11,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    }
+  ]
+}

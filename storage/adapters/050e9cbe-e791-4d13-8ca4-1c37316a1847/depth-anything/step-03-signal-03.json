@@ -1,0 +1,43 @@
+{
+  "provider": "depth-anything",
+  "artifact_type": "depth_manifest",
+  "source": "depth-anything-v2",
+  "strength": 0.6,
+  "payload": {
+    "provider": "depth-anything",
+    "hint_type": "depth-anything-v2",
+    "strength": 0.6,
+    "frame_window": [
+      8,
+      11
+    ],
+    "focus_mode": "scene"
+  },
+  "mode": "depth-anything",
+  "frames": [
+    {
+      "frame_index": 8,
+      "depth_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 9,
+      "depth_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 10,
+      "depth_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 11,
+      "depth_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\050e9cbe-e791-4d13-8ca4-1c37316a1847\\depth-anything\\step-03-signal-03.npy",
+      "focus_mode": "scene"
+    }
+  ]
+}

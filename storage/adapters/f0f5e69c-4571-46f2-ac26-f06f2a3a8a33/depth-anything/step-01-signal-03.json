@@ -1,0 +1,67 @@
+{
+  "provider": "depth-anything",
+  "artifact_type": "depth_manifest",
+  "source": "depth-anything-v2",
+  "strength": 0.6,
+  "payload": {
+    "provider": "depth-anything",
+    "hint_type": "depth-anything-v2",
+    "strength": 0.6,
+    "frame_window": [
+      0,
+      7
+    ],
+    "focus_mode": "scene"
+  },
+  "mode": "stub",
+  "frames": [
+    {
+      "frame_index": 0,
+      "depth_asset": "depth-anything/step-01/frame-000.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 1,
+      "depth_asset": "depth-anything/step-01/frame-001.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 2,
+      "depth_asset": "depth-anything/step-01/frame-002.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 3,
+      "depth_asset": "depth-anything/step-01/frame-003.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 4,
+      "depth_asset": "depth-anything/step-01/frame-004.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 5,
+      "depth_asset": "depth-anything/step-01/frame-005.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 6,
+      "depth_asset": "depth-anything/step-01/frame-006.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 7,
+      "depth_asset": "depth-anything/step-01/frame-007.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    }
+  ]
+}

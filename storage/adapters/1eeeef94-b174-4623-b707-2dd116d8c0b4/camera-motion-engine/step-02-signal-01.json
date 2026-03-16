@@ -1,0 +1,21 @@
+{
+  "provider": "camera-motion-engine",
+  "artifact_type": "camera_manifest",
+  "source": "guided",
+  "strength": 0.45,
+  "payload": {
+    "provider": "camera-motion-engine",
+    "camera_path": "guided",
+    "camera_mode": "slightly closer framing",
+    "intensity": 0.45,
+    "start_frame": 4,
+    "end_frame": 7
+  },
+  "trajectory": {
+    "path": "guided",
+    "start_frame": 4,
+    "end_frame": 7,
+    "intensity": 0.45,
+    "mode": "slightly closer framing"
+  }
+}

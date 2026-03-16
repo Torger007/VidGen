@@ -1,0 +1,43 @@
+{
+  "provider": "depth-soft",
+  "artifact_type": "depth_manifest",
+  "source": "depth-soft",
+  "strength": 0.5,
+  "payload": {
+    "provider": "depth-soft",
+    "hint_type": "depth-soft",
+    "strength": 0.5,
+    "frame_window": [
+      4,
+      7
+    ],
+    "focus_mode": "scene"
+  },
+  "mode": "stub",
+  "frames": [
+    {
+      "frame_index": 4,
+      "depth_asset": "depth-soft/step-02/frame-004.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 5,
+      "depth_asset": "depth-soft/step-02/frame-005.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 6,
+      "depth_asset": "depth-soft/step-02/frame-006.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 7,
+      "depth_asset": "depth-soft/step-02/frame-007.npy",
+      "depth_array_asset": null,
+      "focus_mode": "scene"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "provider": "openpose",
+  "artifact_type": "skeleton_sequence",
+  "source": "openpose-sparse",
+  "strength": 0.45,
+  "payload": {
+    "provider": "openpose",
+    "hint_type": "openpose-sparse",
+    "strength": 0.45,
+    "motion_label": "steady forward movement",
+    "frame_window": [
+      4,
+      7
+    ]
+  },
+  "mode": "openpose-detector",
+  "pose_assets": [
+    {
+      "frame_index": 4,
+      "image_path": "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-02-signal-02.png"
+    },
+    {
+      "frame_index": 5,
+      "image_path": "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-02-signal-02.png"
+    },
+    {
+      "frame_index": 6,
+      "image_path": "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-02-signal-02.png"
+    },
+    {
+      "frame_index": 7,
+      "image_path": "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-02-signal-02.png"
+    }
+  ],
+  "skeleton_sequence": [
+    {
+      "frame_index": 4,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 5,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 6,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 7,
+      "skeleton_id": 1,
+      "joints": {},
+      "confidence": 0.45
+    }
+  ]
+}

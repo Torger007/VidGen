@@ -1,0 +1,19 @@
+{
+  "provider": "cut-stitcher",
+  "artifact_type": "transition_manifest",
+  "source": "cut",
+  "strength": 0.3,
+  "payload": {
+    "provider": "cut-stitcher",
+    "transition_type": "cut",
+    "strength": 0.3,
+    "boundary_frame": 15,
+    "blend_frames": 1
+  },
+  "manifest": {
+    "boundary_frame": 15,
+    "blend_frames": 1,
+    "transition_type": "cut",
+    "provider": "cut-stitcher"
+  }
+}

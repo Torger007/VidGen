@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local environment files
+.env
+.venv/
+venv/
+
+# Local package/build artifacts
+*.egg-info/
+build/
+dist/
+
+# Local model weights and caches
+storage/models/FLUX.1-dev/
+storage/models/stable-diffusion-xl-base-1.0/
+storage/models/stable-video-diffusion-img2vid-xt/
+storage/model-cache/
+storage/hf-home/
+
+# Generated local outputs
+storage/outputs/
+storage/jobs/

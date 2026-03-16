@@ -1,0 +1,128 @@
+{
+  "provider": "openpose",
+  "artifact_type": "skeleton_sequence",
+  "source": "openpose-sparse",
+  "strength": 0.45,
+  "payload": {
+    "provider": "openpose",
+    "hint_type": "openpose-sparse",
+    "strength": 0.45,
+    "motion_label": "gentle settle",
+    "frame_window": [
+      8,
+      11
+    ]
+  },
+  "mode": "stub",
+  "pose_assets": [],
+  "skeleton_sequence": [
+    {
+      "frame_index": 8,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 9,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 10,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 11,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    }
+  ]
+}

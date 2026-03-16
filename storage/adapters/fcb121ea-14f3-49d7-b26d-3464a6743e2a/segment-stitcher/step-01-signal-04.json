@@ -1,0 +1,19 @@
+{
+  "provider": "segment-stitcher",
+  "artifact_type": "transition_manifest",
+  "source": "cold-open",
+  "strength": 0.2,
+  "payload": {
+    "provider": "segment-stitcher",
+    "transition_type": "cold-open",
+    "strength": 0.2,
+    "boundary_frame": 3,
+    "blend_frames": 1
+  },
+  "manifest": {
+    "boundary_frame": 3,
+    "blend_frames": 1,
+    "transition_type": "cold-open",
+    "provider": "segment-stitcher"
+  }
+}

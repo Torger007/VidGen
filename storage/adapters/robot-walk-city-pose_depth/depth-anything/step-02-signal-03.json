@@ -1,0 +1,43 @@
+{
+  "provider": "depth-anything",
+  "artifact_type": "depth_manifest",
+  "source": "depth-anything-v2",
+  "strength": 0.6,
+  "payload": {
+    "provider": "depth-anything",
+    "hint_type": "depth-anything-v2",
+    "strength": 0.6,
+    "frame_window": [
+      4,
+      7
+    ],
+    "focus_mode": "scene"
+  },
+  "mode": "depth-anything",
+  "frames": [
+    {
+      "frame_index": 4,
+      "depth_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 5,
+      "depth_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 6,
+      "depth_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.npy",
+      "focus_mode": "scene"
+    },
+    {
+      "frame_index": 7,
+      "depth_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.png",
+      "depth_array_asset": "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.npy",
+      "focus_mode": "scene"
+    }
+  ]
+}

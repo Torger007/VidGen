@@ -1,0 +1,236 @@
+{
+  "provider": "openpose",
+  "artifact_type": "skeleton_sequence",
+  "source": "openpose-sparse",
+  "strength": 0.45,
+  "payload": {
+    "provider": "openpose",
+    "hint_type": "openpose-sparse",
+    "strength": 0.45,
+    "motion_label": "slow push in",
+    "frame_window": [
+      0,
+      7
+    ]
+  },
+  "mode": "stub",
+  "pose_assets": [],
+  "skeleton_sequence": [
+    {
+      "frame_index": 0,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 1,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 2,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 3,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 4,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 5,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 6,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    },
+    {
+      "frame_index": 7,
+      "skeleton_id": 1,
+      "joints": {
+        "head": [
+          0.5,
+          0.18
+        ],
+        "left_hand": [
+          0.35,
+          0.45
+        ],
+        "right_hand": [
+          0.65,
+          0.45
+        ],
+        "left_foot": [
+          0.42,
+          0.9
+        ],
+        "right_foot": [
+          0.58,
+          0.9
+        ]
+      },
+      "confidence": 0.45
+    }
+  ]
+}

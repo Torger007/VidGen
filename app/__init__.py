@@ -1,0 +1,1 @@
+"""VidGen application package."""

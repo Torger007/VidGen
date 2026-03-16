@@ -1,0 +1,32 @@
+[
+  {
+    "case_id": "robot-walk-city",
+    "prompt": "A robot walking forward in a city street at night",
+    "reference_image_path": "storage/verification-reference.png",
+    "generation_profile": "balanced",
+    "parameters": {
+      "model": "stable-video-diffusion-img2vid",
+      "fps": 4,
+      "width": 256,
+      "height": 256,
+      "num_candidates": 1,
+      "retry_attempts": 1,
+      "seed": 101
+    }
+  },
+  {
+    "case_id": "robot-hero-pose",
+    "prompt": "A hero robot standing in a cinematic alley, raising one hand toward the camera",
+    "reference_image_path": "storage/verification-reference.png",
+    "generation_profile": "balanced",
+    "parameters": {
+      "model": "stable-video-diffusion-img2vid",
+      "fps": 4,
+      "width": 256,
+      "height": 256,
+      "num_candidates": 1,
+      "retry_attempts": 1,
+      "seed": 202
+    }
+  }
+]
