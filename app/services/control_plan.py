@@ -1,6 +1,7 @@
 from app.models.schemas import ControlPlan, ControlPlanStep, PromptBundle
 
 
+#负责shot plan生成逐段控制计划
 class ControlPlanBuilder:
     def build(self, prompt_bundle: PromptBundle, generation_profile: str | None, fps: int) -> ControlPlan:
         steps: list[ControlPlanStep] = []

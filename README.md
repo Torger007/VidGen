@@ -141,7 +141,7 @@ python scripts/test_local_svd_load.py
 
 ## 真实任务演示
 
-如果你已经有本地参考图，可以把它放在 `storage/` 下，或者任意其他本地可访问路径。
+如果你已经有本地参考图，建议统一放在 `storage/regression_inputs/` 下，或者其他有文档说明的本地固定路径。
 
 示例：直接在本地运行任务
 
@@ -154,7 +154,7 @@ service = JobService()
 job = service.create_job(
     GenerateVideoRequest(
         prompt="A robot walking forward in a city street at night",
-        reference_image_path="storage/verification-reference.png",
+        reference_image_path="storage/regression_inputs/verification-reference.png",
         generation_profile="balanced",
         parameters={
             "model": "stable-video-diffusion-img2vid",
@@ -173,6 +173,12 @@ print("error=", job.error_message)
 print("output=", job.output_path)
 print("preview=", job.output_preview_path)
 PY
+```
+
+演示和回归输入资源建议统一放在：
+
+```text
+storage/regression_inputs/
 ```
 
 输出文件会写入：
@@ -210,7 +216,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 你也可以使用演示脚本：
 
 ```bash
-python scripts/submit_demo.py --prompt "A robot walking through a rainy neon city street at night" --reference-image-path "storage/verification-reference.png"
+python scripts/submit_demo.py --prompt "A robot walking through a rainy neon city street at night" --reference-image-path "storage/regression_inputs/verification-reference.png"
 ```
 
 ## 控制回归测试

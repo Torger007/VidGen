@@ -13,6 +13,7 @@ from app.services.condition_preprocessors import (
 )
 
 
+#当前很多 provider 还是 stub，但接口已经分出了 openpose、depth、camera、transition 这些能力
 class BaseProviderStub:
     provider_name = "base"
 

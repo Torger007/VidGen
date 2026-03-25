@@ -3,6 +3,7 @@ from celery import Celery
 from app.core.config import get_settings
 
 
+#负责连接Redis，并初始化Celery
 settings = get_settings()
 
 celery_app = Celery("vidgen", broker=settings.redis_url, backend=settings.redis_url)

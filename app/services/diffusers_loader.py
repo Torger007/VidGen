@@ -7,6 +7,7 @@ from app.core.model_registry import get_model_spec
 from app.models.schemas import GenerationContext
 
 
+#负责真实模型加载，包含 SDXL、FLUX、SVD 和可选 ControlNet 支持。
 class DiffusersUnavailableError(RuntimeError):
     pass
 

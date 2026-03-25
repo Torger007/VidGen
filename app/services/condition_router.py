@@ -9,6 +9,7 @@ from PIL import Image, ImageChops, ImageDraw
 from app.models.schemas import GenerationContext
 
 
+#负责把 pose/depth/camera 等条件真正注入 image/video pipeline 调用参数。
 @dataclass
 class ConditionRouting:
     image_kwargs: dict[str, Any] = field(default_factory=dict)

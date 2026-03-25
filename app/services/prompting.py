@@ -2,6 +2,7 @@ from app.core.prompt_profiles import get_prompt_profile
 from app.models.schemas import PromptBundle, ShotPlanStep
 
 
+#将原始prompt转换为结构化prompt
 class PromptOrchestrator:
     def build_bundle(
         self,

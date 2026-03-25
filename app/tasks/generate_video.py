@@ -8,6 +8,7 @@ from app.services.video_pipeline import VideoPipeline
 from app.workers.celery_app import celery_app
 
 
+#定义异步任务的执行逻辑
 def enqueue_generate_video(job_id: str) -> None:
     settings = get_settings()
     if settings.task_mode == "eager":

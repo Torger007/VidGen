@@ -29,6 +29,7 @@ from app.services.reference_images import ReferenceImageService
 from app.services.scoring import CandidateScorer
 
 
+#核心
 class VideoPipeline:
     def __init__(self) -> None:
         self.settings = get_settings()
@@ -51,6 +52,7 @@ class VideoPipeline:
             reference_image_path=job.reference_image_path,
         )
 
+    #模拟生产流程
     def _render_mock(self, job: JobRecord) -> str:
         output_dir = self.settings.storage_root / "outputs"
         output_path = output_dir / f"{job.job_id}.json"
@@ -381,6 +383,8 @@ class VideoPipeline:
         enhancer = ImageEnhance.Contrast(blended)
         return enhancer.enhance(max(0.8, parameters.prompt_strength + 0.2))
 
+
+    #视频帧生成逻辑
     def _generate_video_frames(
         self,
         video_pipe: Any,
@@ -390,15 +394,22 @@ class VideoPipeline:
         model_name: str,
         generation_context: GenerationContext | None = None,
     ) -> list[Image.Image]:
+        #1.获取解码块大小
         decode_chunk_size = generation_context.decode_chunk_size if generation_context else 8
+
+        #2.动态调整帧数
         effective_num_frames = parameters.num_frames + (
             generation_context.frame_budget_adjustment if generation_context else 0
         )
+
+        #3.构建路由信息
         routing = self.condition_router.build(
             generation_context,
             width=parameters.width,
             height=parameters.height,
         )
+
+        #4. 根据模型类型调用
         if model_name.startswith("stable-video-diffusion"):
             call_kwargs = {
                 "image": initial_frame,
@@ -409,12 +420,19 @@ class VideoPipeline:
                 "num_inference_steps": default_steps,
                 "decode_chunk_size": decode_chunk_size,
             }
+            #5.注入视频侧控制参数
             self.condition_router.apply_video_branch(video_pipe, call_kwargs, routing)
+
+            #6.执行生成
             result = video_pipe(**call_kwargs)
         else:
             raise ValueError(f"Video generation is not implemented for model '{model_name}'.")
+
+        #7.统一格式化为 PIL Image
         frames = result.frames[0]
         normalized = [frame if isinstance(frame, Image.Image) else Image.fromarray(frame) for frame in frames]
+
+        #8.后处理
         return self.condition_router.apply_video_postprocess(normalized, routing)
 
     def _build_generator(self, seed: int | None) -> Any:

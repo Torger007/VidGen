@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
 
 
+#放请求相应和内部数据结构定义
 class PromptBundle(BaseModel):
     subject: str
     scene: str

@@ -1,5 +1,5 @@
 {
-  "status": "running",
+  "status": "completed",
   "case_count": 2,
   "cases": [
     {
@@ -44,15 +44,15 @@
             "depth_control": false
           }
         },
-        "score_total": 0.6425,
+        "score_total": 0.626,
         "selected_candidate": {
           "candidate_index": 1,
-          "score": 0.6425,
+          "score": 0.626,
           "evaluation": {
-            "total_score": 0.6425,
+            "total_score": 0.626,
             "metrics": {
-              "text_alignment": 0.9135,
-              "temporal_stability": 0.6713,
+              "text_alignment": 0.9508,
+              "temporal_stability": 0.5527,
               "motion_score": 0.0,
               "prompt_score": 0.8,
               "reference_score": 0.7,
@@ -64,10 +64,10 @@
               "motion_score": "frame-diff"
             },
             "diagnostics": {
-              "optical_flow_mean": 17.475790811621625,
-              "optical_flow_std": 5.745149757971258,
+              "optical_flow_mean": 11.532852338707965,
+              "optical_flow_std": 5.158950710078249,
               "frame_diff_mean": null,
-              "motion_diff_mean": 0.3793545663356781,
+              "motion_diff_mean": 0.23544040322303772,
               "sampled_frame_indices": [
                 0,
                 12,
@@ -153,12 +153,6 @@
             ],
             "pose_artifacts": 3,
             "pose_frames": 4,
-            "pose_asset_images": [
-              "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-01-signal-02.png",
-              "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-01-signal-02.png",
-              "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-01-signal-02.png",
-              "storage\\adapters\\robot-walk-city-pose_depth\\openpose\\step-01-signal-02.png"
-            ],
             "depth_artifact_paths": [
               "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-01-signal-03.json",
               "storage\\adapters\\robot-walk-city-pose_depth\\depth-anything\\step-02-signal-03.json",
@@ -208,16 +202,16 @@
             "depth_control": true
           }
         },
-        "score_total": 0.6353,
+        "score_total": 0.582,
         "selected_candidate": {
           "candidate_index": 1,
-          "score": 0.6353,
+          "score": 0.582,
           "evaluation": {
-            "total_score": 0.6353,
+            "total_score": 0.582,
             "metrics": {
-              "text_alignment": 0.9207,
-              "temporal_stability": 0.6321,
-              "motion_score": 0.0,
+              "text_alignment": 0.9655,
+              "temporal_stability": 0.1263,
+              "motion_score": 0.3835,
               "prompt_score": 0.8,
               "reference_score": 0.7,
               "candidate_bias": 0.1
@@ -228,18 +222,20 @@
               "motion_score": "frame-diff"
             },
             "diagnostics": {
-              "optical_flow_mean": 13.010507470683047,
-              "optical_flow_std": 4.787086319224243,
+              "optical_flow_mean": 3.4899704879836033,
+              "optical_flow_std": 3.049085875434438,
               "frame_diff_mean": null,
-              "motion_diff_mean": 0.3604271411895752,
+              "motion_diff_mean": 0.12931695580482483,
               "sampled_frame_indices": [
                 0,
                 10,
                 19
               ]
             },
-            "passed_thresholds": true,
-            "rejection_reasons": []
+            "passed_thresholds": false,
+            "rejection_reasons": [
+              "temporal_stability_below_threshold"
+            ]
           },
           "preview_path": "storage\\outputs\\robot-walk-city-pose_depth\\candidate-1.png",
           "video_path": "storage\\outputs\\robot-walk-city-pose_depth\\candidate-1.mp4",
@@ -274,12 +270,12 @@
         "controlled_has_depth": true,
         "controlled_video_conditioning_used": true,
         "routing_differs_from_baseline": true,
-        "score_delta": -0.0072
+        "score_delta": -0.044
       }
     },
     {
       "case_id": "robot-hero-pose",
-      "status": "running",
+      "status": "completed",
       "baseline": {
         "mode": "baseline",
         "job_id": "robot-hero-pose-baseline",
@@ -319,15 +315,15 @@
             "depth_control": false
           }
         },
-        "score_total": 0.6474,
+        "score_total": 0.6085,
         "selected_candidate": {
           "candidate_index": 1,
-          "score": 0.6474,
+          "score": 0.6085,
           "evaluation": {
-            "total_score": 0.6474,
+            "total_score": 0.6085,
             "metrics": {
-              "text_alignment": 0.9226,
-              "temporal_stability": 0.6781,
+              "text_alignment": 0.962,
+              "temporal_stability": 0.4672,
               "motion_score": 0.0,
               "prompt_score": 0.8,
               "reference_score": 0.7,
@@ -339,10 +335,10 @@
               "motion_score": "frame-diff"
             },
             "diagnostics": {
-              "optical_flow_mean": 17.272576352824334,
-              "optical_flow_std": 5.559465067029465,
+              "optical_flow_mean": 10.249732382919477,
+              "optical_flow_std": 5.461185276411907,
               "frame_diff_mean": null,
-              "motion_diff_mean": 0.3717404305934906,
+              "motion_diff_mean": 0.21786214411258698,
               "sampled_frame_indices": [
                 0,
                 12,
@@ -377,6 +373,175 @@
             }
           }
         }
+      },
+      "pose_depth": {
+        "mode": "pose_depth",
+        "job_id": "robot-hero-pose-pose_depth",
+        "status": "succeeded",
+        "error_message": null,
+        "output_path": "storage\\outputs\\robot-hero-pose-pose_depth.json",
+        "preview_path": "storage\\outputs\\robot-hero-pose-pose_depth.png",
+        "video_path": "storage\\outputs\\robot-hero-pose-pose_depth.mp4",
+        "provider_artifacts": {
+          "camera_manifest": [
+            "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-01-signal-01.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-02-signal-01.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-03-signal-01.json"
+          ],
+          "skeleton_sequence": [
+            "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-01-signal-02.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-02-signal-02.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-03-signal-02.json"
+          ],
+          "depth_manifest": [
+            "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-01-signal-03.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-02-signal-03.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-03-signal-03.json"
+          ],
+          "transition_manifest": [
+            "storage\\adapters\\robot-hero-pose-pose_depth\\segment-stitcher\\step-01-signal-04.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\cut-stitcher\\step-02-signal-04.json",
+            "storage\\adapters\\robot-hero-pose-pose_depth\\segment-stitcher\\step-03-signal-04.json"
+          ]
+        },
+        "generation_context": {
+          "prompt_suffixes": [
+            "consistent body pose across frames",
+            "scene depth structure preserved",
+            "camera motion: push-in"
+          ],
+          "pose_guidance": "pose-conditioned motion continuity",
+          "depth_guidance": "depth-aware composition (scene)",
+          "transition_guidance": "smooth segment transition with 1 blend frames",
+          "camera_guidance": "camera path follows push-in",
+          "decode_chunk_size": 9,
+          "frame_budget_adjustment": 8,
+          "metadata": {
+            "pose_artifact_paths": [
+              "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-01-signal-02.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-02-signal-02.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\openpose\\step-03-signal-02.json"
+            ],
+            "pose_artifacts": 3,
+            "pose_frames": 4,
+            "depth_artifact_paths": [
+              "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-01-signal-03.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-02-signal-03.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\depth-soft\\step-03-signal-03.json"
+            ],
+            "depth_artifacts": 3,
+            "depth_focus_mode": "scene",
+            "depth_asset_images": [
+              "depth-soft/step-01/frame-000.npy",
+              "depth-soft/step-01/frame-001.npy",
+              "depth-soft/step-01/frame-002.npy",
+              "depth-soft/step-01/frame-003.npy"
+            ],
+            "transition_artifact_paths": [
+              "storage\\adapters\\robot-hero-pose-pose_depth\\segment-stitcher\\step-01-signal-04.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\cut-stitcher\\step-02-signal-04.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\segment-stitcher\\step-03-signal-04.json"
+            ],
+            "transition_artifacts": 3,
+            "transition_blend_frames": 1,
+            "camera_artifact_paths": [
+              "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-01-signal-01.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-02-signal-01.json",
+              "storage\\adapters\\robot-hero-pose-pose_depth\\camera-motion-engine\\step-03-signal-01.json"
+            ],
+            "camera_artifacts": 3,
+            "camera_path": "push-in"
+          }
+        },
+        "routing_summary": {
+          "pose_control": true,
+          "depth_control": true,
+          "transition_count": 3,
+          "camera_path_count": 3,
+          "used_image_conditioning": false,
+          "used_video_conditioning": true,
+          "image_call_summary": {},
+          "video_call_summary": {
+            "branch": "video",
+            "has_control_input": false,
+            "control_image_count": 0,
+            "control_image_sizes": [],
+            "controlnet_conditioning_scale": null,
+            "motion_bucket_id": 139,
+            "noise_aug_strength": 0.056,
+            "pose_control": true,
+            "depth_control": true
+          }
+        },
+        "score_total": 0.5276,
+        "selected_candidate": {
+          "candidate_index": 1,
+          "score": 0.5276,
+          "evaluation": {
+            "total_score": 0.5276,
+            "metrics": {
+              "text_alignment": 0.9531,
+              "temporal_stability": 0.1562,
+              "motion_score": 0.0,
+              "prompt_score": 0.8,
+              "reference_score": 0.7,
+              "candidate_bias": 0.1
+            },
+            "method": {
+              "text_alignment": "clip-avg",
+              "temporal_stability": "optical-flow",
+              "motion_score": "frame-diff"
+            },
+            "diagnostics": {
+              "optical_flow_mean": 9.05234916586625,
+              "optical_flow_std": 7.638090602945151,
+              "frame_diff_mean": null,
+              "motion_diff_mean": 0.1912676990032196,
+              "sampled_frame_indices": [
+                0,
+                10,
+                19
+              ]
+            },
+            "passed_thresholds": false,
+            "rejection_reasons": [
+              "temporal_stability_below_threshold"
+            ]
+          },
+          "preview_path": "storage\\outputs\\robot-hero-pose-pose_depth\\candidate-1.png",
+          "video_path": "storage\\outputs\\robot-hero-pose-pose_depth\\candidate-1.mp4",
+          "seed": 202,
+          "attempts_used": 1,
+          "routing_summary": {
+            "pose_control": true,
+            "depth_control": true,
+            "transition_count": 3,
+            "camera_path_count": 3,
+            "used_image_conditioning": false,
+            "used_video_conditioning": true,
+            "image_call_summary": {},
+            "video_call_summary": {
+              "branch": "video",
+              "has_control_input": false,
+              "control_image_count": 0,
+              "control_image_sizes": [],
+              "controlnet_conditioning_scale": null,
+              "motion_bucket_id": 139,
+              "noise_aug_strength": 0.056,
+              "pose_control": true,
+              "depth_control": true
+            }
+          }
+        }
+      },
+      "assertions": {
+        "baseline_succeeded": true,
+        "controlled_succeeded": true,
+        "controlled_has_pose": true,
+        "controlled_has_depth": true,
+        "controlled_video_conditioning_used": true,
+        "routing_differs_from_baseline": true,
+        "score_delta": -0.0809
       }
     }
   ]

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-
+#管理支持的模型
 @dataclass(frozen=True)
 class ModelSpec:
     name: str

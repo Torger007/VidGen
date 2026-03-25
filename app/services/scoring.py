@@ -6,6 +6,7 @@ from PIL import Image
 from app.models.schemas import GenerationParameters, PromptBundle
 
 
+#对生成候选做评分，包括 text alignment、temporal stability、motion score。
 class CandidateScorer:
     def __init__(self) -> None:
         self._clip_bundle: tuple[Any, Any] | None = None

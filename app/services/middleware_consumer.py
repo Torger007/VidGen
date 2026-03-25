@@ -4,6 +4,7 @@ from pathlib import Path
 from app.models.schemas import GenerationContext, ProviderExecutionPlan
 
 
+#把 provider 输出再整理成 GenerationContext，供后面生成模型消费。
 class MiddlewareConsumer:
     def build_context(self, execution: ProviderExecutionPlan) -> GenerationContext:
         context = GenerationContext()

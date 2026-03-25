@@ -5,6 +5,7 @@ from PIL import Image
 from app.core.config import get_settings
 
 
+#负责参考图读取和尺寸处理。
 class ReferenceImageService:
     def __init__(self) -> None:
         self.settings = get_settings()

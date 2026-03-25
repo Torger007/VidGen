@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 
+#负责 JSON、图片、视频写盘。
 class ArtifactWriter:
     def write_json(self, path: Path, payload: dict[str, Any]) -> str:
         path.write_text(json.dumps(payload, indent=2), encoding="utf-8")

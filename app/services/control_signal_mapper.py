@@ -1,6 +1,7 @@
 from app.models.schemas import AdapterPlan, AdapterSignal, AdapterStepPlan, ControlPlan
 
 
+#将control plan进一步映射成adapt signal，是“语义计划-> 中间控制信号”一层
 class ControlSignalMapper:
     def build(self, control_plan: ControlPlan | None, model_name: str, use_mock: bool) -> AdapterPlan:
         if control_plan is None:

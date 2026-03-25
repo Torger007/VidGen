@@ -9,6 +9,7 @@ from app.services.provider_stubs import (
 )
 
 
+#执行这些adapter，并生成provider artifacts
 class AdapterExecutor:
     def __init__(self) -> None:
         self._registry = {
