@@ -4,7 +4,7 @@ VidGen 是一个文本生成视频的 MVP 脚手架，围绕开源模型编排�
 
 ## 当前状态
 
-仓库目前已经包含第 1 阶段的第一批实现内容：
+仓库目前已经完成第 1 阶段和第 2 阶段前中段的实现内容：
 
 - 用于提交任务和查询状态的 FastAPI 服务
 - 使用 Celery worker 的异步生成集成
@@ -13,6 +13,9 @@ VidGen 是一个文本生成视频的 MVP 脚手架，围绕开源模型编排�
 - 可替换的视频生成管线接口
 - 便于早期迭代的本地文件型任务存储
 - 基于 Diffusers 的开源管线接入，支持 `SDXL -> SVD`
+- 控制链路接入（pose/depth/camera/transition），含 ControlNet 注入
+- 真实预处理器接入（OpenPose + Depth Anything）
+- 一键演示脚本（`run_demo.ps1` + `submit_demo.py`）
 - 覆盖完整路线图的架构文档
 
 ## 项目结构
@@ -69,9 +72,11 @@ VIDGEN_DEFAULT_MODEL=stable-video-diffusion-img2vid
 如果你希望在存在中间件产物时，让 SDXL 首帧生成接入真实的 pose/depth ControlNet 分支，还需要设置：
 
 ```bash
-VIDGEN_SDXL_OPENPOSE_CONTROLNET_ID=<your-openpose-controlnet-id>
-VIDGEN_SDXL_DEPTH_CONTROLNET_ID=<your-depth-controlnet-id>
+VIDGEN_SDXL_OPENPOSE_CONTROLNET_ID=lllyasviel/control_v2p_openpose_sdxl
+VIDGEN_SDXL_DEPTH_CONTROLNET_ID=diffusers/controlnet-depth-sdxl-1.0
 ```
+
+> 注：如果本地 `storage/models/controlnet-openpose-sdxl-1.0/` 和 `storage/models/controlnet-depth-sdxl-1.0/` 目录存在，模型注册表会优先使用本地路径。
 
 如果你希望适配器执行阶段基于本地参考图真正生成 OpenPose / Depth Anything 预处理资源，还需要设置：
 
@@ -121,6 +126,8 @@ set VIDGEN_DEVICE=cpu
 storage/models/stable-diffusion-xl-base-1.0
 storage/models/stable-video-diffusion-img2vid-xt
 storage/models/FLUX.1-dev
+storage/models/controlnet-openpose-sdxl-1.0
+storage/models/controlnet-depth-sdxl-1.0
 ```
 
 当前模型注册表会优先使用这些本地目录，只有在本地目录不存在时才回退到 Hugging Face 的模型 ID。
@@ -216,7 +223,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 你也可以使用演示脚本：
 
 ```bash
+# 一键演示（自动启动 API + 提交 job）
+.\scripts\run_demo.ps1
+
+# 或手动提交（需先启动 API）
 python scripts/submit_demo.py --prompt "A robot walking through a rainy neon city street at night" --reference-image-path "storage/regression_inputs/verification-reference.png"
+
+# 零参数（使用默认 demo case）
+python scripts/submit_demo.py
 ```
 
 ## 控制回归测试
@@ -325,6 +339,13 @@ terminal traceback
 ## 演示脚本
 
 你可以通过下面的方式提交并轮询一个任务：
+
+```bash
+# 使用默认 demo case（prompt、model、seed、image 全部有默认值）
+python scripts/submit_demo.py
+```
+
+或者自定义参数：
 
 ```bash
 python scripts/submit_demo.py --prompt "A robot walking through a rainy neon city street at night"

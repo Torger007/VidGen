@@ -19,9 +19,15 @@ dist/
 storage/models/FLUX.1-dev/
 storage/models/stable-diffusion-xl-base-1.0/
 storage/models/stable-video-diffusion-img2vid-xt/
+storage/models/controlnet-openpose-sdxl-1.0/
+storage/models/controlnet-depth-sdxl-1.0/
 storage/model-cache/
 storage/hf-home/
 
 # Generated local outputs
 storage/outputs/
 storage/jobs/
+storage/adapters/
+storage/regression/
+storage/regression_inputs/
+storage/verification-reference.png
