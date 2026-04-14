@@ -1,10 +1,15 @@
+import logging
 import os
 from functools import lru_cache
-from pathlib import Path
 from typing import Any
 
 import numpy as np
 from PIL import Image
+
+logging.getLogger("transformers.image_processing_utils").addFilter(
+    lambda record: "fast processor" not in record.getMessage()
+)
+logger = logging.getLogger(__name__)
 
 
 class OpenPoseUnavailableError(RuntimeError):
@@ -47,33 +52,59 @@ class DepthAnythingPreprocessor:
 def _load_openpose_detector() -> Any | None:
     try:
         from controlnet_aux import OpenposeDetector
-    except ImportError:
-        return None
+    except Exception as exc:
+        logger.warning("Failed to import top-level OpenPose detector dependencies: %s", exc)
+        try:
+            from controlnet_aux.open_pose import OpenposeDetector
+        except Exception as nested_exc:
+            logger.warning("Failed to import fallback OpenPose detector module: %s", nested_exc)
+            return None
 
     model_id = os.getenv("VIDGEN_OPENPOSE_DETECTOR_ID", "lllyasviel/Annotators")
     cache_dir = os.getenv("VIDGEN_MODEL_CACHE_DIR")
-    kwargs: dict[str, Any] = {}
+    kwargs: dict[str, Any] = {"local_files_only": True}
     if cache_dir:
         kwargs["cache_dir"] = cache_dir
     try:
         return OpenposeDetector.from_pretrained(model_id, **kwargs)
     except Exception:
-        return None
+        # Fallback: try without local_files_only (e.g., first-time download)
+        try:
+            kwargs.pop("local_files_only")
+            return OpenposeDetector.from_pretrained(model_id, **kwargs)
+        except Exception:
+            return None
 
 
 @lru_cache(maxsize=1)
 def _load_depth_estimator() -> Any | None:
     try:
-        from transformers import pipeline
-    except ImportError:
+        from transformers import AutoImageProcessor, AutoModelForDepthEstimation, pipeline
+    except Exception as exc:
+        logger.warning("Failed to import depth estimator dependencies: %s", exc)
         return None
 
     model_id = os.getenv("VIDGEN_DEPTH_ANYTHING_MODEL_ID", "LiheYoung/depth-anything-small-hf")
-    device = 0 if os.getenv("VIDGEN_DEVICE", "cpu") == "cuda" else -1
+    device_str = "cuda" if os.getenv("VIDGEN_DEVICE", "cpu") == "cuda" else "cpu"
+    cache_dir = os.getenv("VIDGEN_MODEL_CACHE_DIR") or None
     try:
-        return pipeline("depth-estimation", model=model_id, device=device)
+        processor = AutoImageProcessor.from_pretrained(
+            model_id, use_fast=False, cache_dir=cache_dir, local_files_only=True
+        )
+        model = AutoModelForDepthEstimation.from_pretrained(
+            model_id, cache_dir=cache_dir, local_files_only=True
+        )
+        model = model.to(device_str)
+        return pipeline("depth-estimation", model=model, image_processor=processor, device=device_str)
     except Exception:
-        return None
+        # Fallback: try without local_files_only (e.g. first-time download)
+        try:
+            processor = AutoImageProcessor.from_pretrained(model_id, use_fast=False, cache_dir=cache_dir)
+            model = AutoModelForDepthEstimation.from_pretrained(model_id, cache_dir=cache_dir)
+            model = model.to(device_str)
+            return pipeline("depth-estimation", model=model, image_processor=processor, device=device_str)
+        except Exception:
+            return None
 
 
 def _resolve_depth_image(prediction: Any) -> Image.Image:

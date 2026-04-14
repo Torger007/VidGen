@@ -7,7 +7,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 #读取VIDGEN_*环境变量
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="VIDGEN_", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=str(Path(__file__).resolve().parents[2] / ".env"),
+        env_prefix="VIDGEN_",
+        extra="ignore",
+    )
 
     app_name: str = "VidGen"
     environment: str = "local"
@@ -25,7 +29,7 @@ class Settings(BaseSettings):
     sdxl_openpose_controlnet_id: str | None = None
     sdxl_depth_controlnet_id: str | None = None
     ffmpeg_binary: str = "ffmpeg"
-    device: str = "cuda"
+    device: str = "cpu"
     output_fps: int = 8
     output_frames: int = 24
     output_width: int = 576

@@ -52,7 +52,10 @@ def run_generate_video(job_id: str) -> None:
         job.error_message = None
     except Exception as exc:  # pragma: no cover
         job.status = "failed"
-        job.error_message = str(exc)
+        exc_type = type(exc).__name__
+        exc_msg = str(exc) or "(no message)"
+        exc_repr = repr(exc)
+        job.error_message = f"{exc_type}: {exc_msg}" if str(exc) else f"{exc_type}: {exc_repr}"
     finally:
         job.updated_at = utc_now()
         store.save(job)

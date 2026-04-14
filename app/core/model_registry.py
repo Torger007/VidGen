@@ -22,6 +22,8 @@ LOCAL_MODEL_ROOT = PROJECT_ROOT / "storage" / "models"
 LOCAL_SDXL_BASE = LOCAL_MODEL_ROOT / "stable-diffusion-xl-base-1.0"
 LOCAL_SVD_IMG2VID_XT = LOCAL_MODEL_ROOT / "stable-video-diffusion-img2vid-xt"
 LOCAL_FLUX_DEV = LOCAL_MODEL_ROOT / "FLUX.1-dev"
+LOCAL_SDXL_OPENPOSE_CONTROLNET = LOCAL_MODEL_ROOT / "controlnet-openpose-sdxl-1.0"
+LOCAL_SDXL_DEPTH_CONTROLNET = LOCAL_MODEL_ROOT / "controlnet-depth-sdxl-1.0"
 
 
 def _prefer_local_model(local_path: Path, remote_id: str) -> str:

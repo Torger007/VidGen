@@ -2,13 +2,20 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
-from app.models.schemas import GenerationParameters, JobRecord, utc_now
-from app.services.control_plan import ControlPlanBuilder
-from app.services.prompting import PromptOrchestrator
-from app.services.video_pipeline import VideoPipeline
+# Ensure project root is on sys.path so `app` can be imported when running
+# this script directly (e.g. `python scripts/run_control_regression.py`).
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from app.models.schemas import GenerationParameters, JobRecord, utc_now  # noqa: E402
+from app.services.control_plan import ControlPlanBuilder  # noqa: E402
+from app.services.prompting import PromptOrchestrator  # noqa: E402
+from app.services.video_pipeline import VideoPipeline  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:

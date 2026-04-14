@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from PIL import Image, ImageChops, ImageDraw
+from PIL import Image, ImageDraw
 
 from app.models.schemas import GenerationContext
 
@@ -69,10 +69,12 @@ class ConditionRouter:
         camera_intensity = self._camera_intensity(routing.camera_paths)
         if camera_intensity > 0:
             if "motion_bucket_id" in params:
-                call_kwargs["motion_bucket_id"] = min(255, 96 + round(camera_intensity * 96))
+                # SVD default=127; use conservative range [64, 96]
+                call_kwargs["motion_bucket_id"] = min(96, 64 + round(camera_intensity * 32))
                 applied = True
             if "noise_aug_strength" in params:
-                call_kwargs["noise_aug_strength"] = min(0.2, round(0.02 + camera_intensity * 0.08, 3))
+                # Low noise augmentation preserves detail; map to [0.02, 0.05]
+                call_kwargs["noise_aug_strength"] = min(0.05, round(0.02 + camera_intensity * 0.03, 3))
                 applied = True
         routing.used_video_conditioning = applied
         routing.video_call_summary = self._summarize_call_kwargs(call_kwargs, routing, branch="video")
@@ -91,12 +93,9 @@ class ConditionRouter:
 
     def apply_initial_frame_fallback(self, image: Image.Image, routing: ConditionRouting) -> Image.Image:
         output = image.convert("RGB")
-        if routing.pose_control_image and not routing.used_image_conditioning:
-            pose_overlay = routing.pose_control_image.resize(output.size).convert("RGB")
-            output = Image.blend(output, pose_overlay, 0.12)
-        if routing.depth_control_image and not routing.used_image_conditioning:
-            depth_overlay = routing.depth_control_image.resize(output.size).convert("RGB")
-            output = ImageChops.soft_light(output, depth_overlay)
+        # When image conditioning is not active, overlay blending only degrades quality.
+        # Skip overlay — the pose/depth guidance is already injected via prompt_suffixes
+        # in GenerationContext, which is sufficient for prompt-level control.
         return output
 
     def apply_video_postprocess(self, frames: list[Image.Image], routing: ConditionRouting) -> list[Image.Image]:
@@ -184,10 +183,10 @@ class ConditionRouter:
         scales: list[float] = []
         if routing.pose_control_image:
             control_images.append(routing.pose_control_image)
-            scales.append(0.75)
+            scales.append(0.4)
         if routing.depth_control_image:
             control_images.append(routing.depth_control_image)
-            scales.append(0.7)
+            scales.append(0.35)
         return control_images, scales
 
     def _build_pose_control_image(self, path: Path, width: int, height: int) -> Image.Image:

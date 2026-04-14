@@ -109,7 +109,7 @@ def main() -> int:
         decode_chunk_size=args.decode_chunk_size,
     )
     frames = result.frames[0]
-    print(f"INFERENCE_OK=1")
+    print("INFERENCE_OK=1")
     print(f"FRAME_COUNT={len(frames)}")
     return 0
 

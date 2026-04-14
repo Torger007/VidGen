@@ -1,4 +1,5 @@
 from app.models.schemas import CandidateSummary, JobListItem, JobRecord
+from app.models.schemas import GenerateVideoRequest
 
 
 def test_job_list_item_is_lighter_than_job_record() -> None:
@@ -58,6 +59,7 @@ def test_job_record_supports_rejection_summary() -> None:
             "prompt_bundle": {
                 "subject": "robot",
                 "scene": "city",
+                "scene_template": "city",
                 "style": "cinematic",
                 "action": "walk",
                 "camera": "slow dolly in",
@@ -73,3 +75,14 @@ def test_job_record_supports_rejection_summary() -> None:
 
     assert record.selection_mode == "fallback-best"
     assert record.rejection_reason_counts["total_score_below_threshold"] == 2
+
+
+def test_generate_video_request_allows_disabling_control_plan() -> None:
+    request = GenerateVideoRequest.model_validate(
+        {
+            "prompt": "A robot walking through a city street at night",
+            "enable_control_plan": False,
+        }
+    )
+
+    assert request.enable_control_plan is False

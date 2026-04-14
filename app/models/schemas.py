@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
@@ -147,6 +147,7 @@ class GenerateVideoRequest(BaseModel):
     style_hint: str | None = Field(default=None, max_length=200)
     reference_image_path: str | None = None
     generation_profile: str | None = None
+    enable_control_plan: bool = True
     parameters: GenerationParameters | None = None
 
 
@@ -194,6 +195,8 @@ class CandidateSummary(BaseModel):
 
 
 class JobRecord(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     job_id: str
     prompt: str
     status: JobStatus

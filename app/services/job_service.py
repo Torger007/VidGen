@@ -27,9 +27,11 @@ class JobService:
             request.style_hint,
             generation_profile=profile_name,
         )
-        control_plan = self.control_plan_builder.build(prompt_bundle, profile_name, parameters.fps)
-        parameters.duration_sec = max(1, round(control_plan.total_duration_sec))
-        parameters.num_frames = control_plan.total_frames
+        control_plan = None
+        if request.enable_control_plan:
+            control_plan = self.control_plan_builder.build(prompt_bundle, profile_name, parameters.fps)
+            parameters.duration_sec = max(1, round(control_plan.total_duration_sec))
+            parameters.num_frames = control_plan.total_frames
         job = JobRecord(
             job_id=str(uuid.uuid4()),
             prompt=request.prompt,

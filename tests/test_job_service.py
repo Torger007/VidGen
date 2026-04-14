@@ -53,3 +53,25 @@ def test_create_job_with_multiple_candidates_records_candidate_paths(
     assert job.selected_candidate is not None
     assert saved.selection_mode is not None
     assert saved.generation_profile is not None
+
+
+def test_create_job_can_disable_control_plan(monkeypatch: object, tmp_path: Path) -> None:
+    monkeypatch.setenv("VIDGEN_STORAGE_ROOT", str(tmp_path))
+    monkeypatch.setenv("VIDGEN_USE_MOCK_PIPELINE", "true")
+    monkeypatch.setenv("VIDGEN_TASK_MODE", "eager")
+
+    from app.core.config import get_settings
+
+    get_settings.cache_clear()
+    service = JobService()
+    job = service.create_job(
+        GenerateVideoRequest(
+            prompt="A robot walking through a rainy neon city street at night",
+            enable_control_plan=False,
+            parameters={"num_frames": 8, "fps": 4},
+        )
+    )
+
+    assert job.control_plan is None
+    assert job.parameters.num_frames == 8
+    assert job.parameters.fps == 4

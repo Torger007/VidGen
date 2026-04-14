@@ -246,10 +246,14 @@ class CandidateScorer:
             self._clip_available = False
             return None
 
-        self._clip_bundle = (
-            CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32"),
-            CLIPModel.from_pretrained("openai/clip-vit-base-patch32"),
-        )
+        try:
+            self._clip_bundle = (
+                CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32"),
+                CLIPModel.from_pretrained("openai/clip-vit-base-patch32"),
+            )
+        except Exception:
+            self._clip_available = False
+            return None
         return self._clip_bundle
 
     def _load_cv2(self) -> Any | None:

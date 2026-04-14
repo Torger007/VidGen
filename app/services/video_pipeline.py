@@ -1,3 +1,4 @@
+import logging
 import random
 from pathlib import Path
 from typing import Any
@@ -22,11 +23,14 @@ from app.services.control_signal_mapper import ControlSignalMapper
 from app.services.diffusers_loader import (
     DiffusersUnavailableError,
     build_generation_context_key,
+    clear_pipeline_cache,
     load_pipelines,
 )
 from app.services.middleware_consumer import MiddlewareConsumer
 from app.services.reference_images import ReferenceImageService
 from app.services.scoring import CandidateScorer
+
+logger = logging.getLogger(__name__)
 
 
 #核心
@@ -167,32 +171,78 @@ class VideoPipeline:
         )
         generation_context = self._build_generation_context(provider_execution)
 
+        # When generation_context contains pose/depth control signals, we must keep
+        # the image pipeline alive even if a reference image exists, because the
+        # ControlNet branch runs through the image (SDXL) pipeline.
+        # Note: pose/depth artifact paths are nested inside generation_context["metadata"].
+        gc_metadata = generation_context.get("metadata", {}) if generation_context else {}
+        has_control_signals = bool(
+            gc_metadata.get("pose_asset_images") or gc_metadata.get("depth_asset_images")
+        )
+        skip_image = reference_image_path is not None and not has_control_signals
+        generation_context_model = GenerationContext.model_validate(generation_context)
+        generation_context_key = build_generation_context_key(generation_context_model)
+        logger.info(
+            "render_open_source start job=%s model=%s reference=%s control=%s size=%sx%s frames=%s candidates=%s",
+            job_id,
+            spec.name,
+            bool(reference_image_path),
+            has_control_signals,
+            parameters.width,
+            parameters.height,
+            parameters.num_frames,
+            parameters.num_candidates,
+        )
+
         try:
-            pipelines = load_pipelines(
-                spec.name,
-                build_generation_context_key(GenerationContext.model_validate(generation_context)),
-                skip_image_pipeline=reference_image_path is not None,
-            )
             candidates = []
-            for index in range(parameters.num_candidates):
-                candidate = self._render_candidate(
-                    image_pipe=pipelines["image"],
-                    video_pipe=pipelines["video"],
-                    prompt_bundle=prompt_bundle,
-                    parameters=parameters,
-                    spec_name=spec.name,
-                    image_steps=spec.default_image_steps,
-                    video_steps=spec.default_num_inference_steps,
-                    output_dir=candidates_dir,
-                    candidate_index=index,
-                    reference_image_path=reference_image_path,
-                    generation_context=GenerationContext.model_validate(generation_context),
+            if has_control_signals:
+                logger.info("render_open_source staged control path job=%s", job_id)
+                for index in range(parameters.num_candidates):
+                    candidate = self._render_candidate_staged(
+                        model_name=spec.name,
+                        generation_context_key=generation_context_key,
+                        prompt_bundle=prompt_bundle,
+                        parameters=parameters,
+                        spec_name=spec.name,
+                        image_steps=spec.default_image_steps,
+                        video_steps=spec.default_num_inference_steps,
+                        output_dir=candidates_dir,
+                        candidate_index=index,
+                        reference_image_path=reference_image_path,
+                        generation_context=generation_context_model,
+                    )
+                    candidates.append(candidate)
+            else:
+                logger.info(
+                    "render_open_source shared pipelines job=%s skip_image=%s",
+                    job_id,
+                    skip_image,
                 )
-                candidates.append(candidate)
+                pipelines = load_pipelines(
+                    spec.name,
+                    generation_context_key,
+                    skip_image_pipeline=skip_image,
+                )
+                for index in range(parameters.num_candidates):
+                    candidate = self._render_candidate(
+                        image_pipe=pipelines["image"],
+                        video_pipe=pipelines["video"],
+                        prompt_bundle=prompt_bundle,
+                        parameters=parameters,
+                        spec_name=spec.name,
+                        image_steps=spec.default_image_steps,
+                        video_steps=spec.default_num_inference_steps,
+                        output_dir=candidates_dir,
+                        candidate_index=index,
+                        reference_image_path=reference_image_path,
+                        generation_context=generation_context_model,
+                    )
+                    candidates.append(candidate)
         except DiffusersUnavailableError:
             raise
         except Exception as exc:
-            raise RuntimeError(f"Open-source video generation failed: {exc}") from exc
+            raise RuntimeError(f"Open-source video generation failed: {type(exc).__name__}: {exc}") from exc
 
         passed_candidates = [item for item in candidates if item["evaluation"]["passed_thresholds"]]
         best_candidate = max(passed_candidates or candidates, key=lambda item: item["score"])
@@ -221,6 +271,143 @@ class VideoPipeline:
             "rejection_reason_counts": self._collect_rejection_reason_counts(candidates),
         }
         return self.writer.write_json(metadata_path, payload)
+
+    def _render_candidate_staged(
+        self,
+        *,
+        model_name: str,
+        generation_context_key: str | None,
+        prompt_bundle: PromptBundle,
+        parameters: GenerationParameters,
+        spec_name: str,
+        image_steps: int,
+        video_steps: int,
+        output_dir: Path,
+        candidate_index: int,
+        reference_image_path: str | None,
+        generation_context: GenerationContext | None,
+    ) -> dict[str, Any]:
+        last_error: str | None = None
+        candidate_seed = (parameters.seed if parameters.seed is not None else random.randint(1, 999999)) + candidate_index
+        for attempt in range(parameters.retry_attempts):
+            try:
+                logger.info(
+                    "candidate_staged start candidate=%s attempt=%s seed=%s ref=%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                    candidate_seed + attempt,
+                    bool(reference_image_path),
+                )
+                image_pipe = None
+                if not (reference_image_path and parameters.reference_strength >= 0.99):
+                    logger.info(
+                        "candidate_staged loading image pipeline on cpu candidate=%s attempt=%s",
+                        candidate_index + 1,
+                        attempt + 1,
+                    )
+                    image_pipelines = load_pipelines(
+                        model_name,
+                        generation_context_key,
+                        skip_video_pipeline=True,
+                        device_override="cpu",
+                    )
+                    image_pipe = image_pipelines["image"]
+
+                logger.info(
+                    "candidate_staged resolving initial frame candidate=%s attempt=%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                )
+                initial_frame = self._resolve_initial_frame(
+                    image_pipe=image_pipe,
+                    prompt_bundle=prompt_bundle,
+                    parameters=parameters,
+                    image_steps=image_steps,
+                    reference_image_path=reference_image_path,
+                    seed=candidate_seed + attempt,
+                    generation_context=generation_context,
+                    generator_device="cpu",
+                )
+
+                logger.info(
+                    "candidate_staged initial frame ready candidate=%s attempt=%s size=%sx%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                    initial_frame.width,
+                    initial_frame.height,
+                )
+                clear_pipeline_cache()
+                logger.info(
+                    "candidate_staged loading video pipeline on %s candidate=%s attempt=%s",
+                    self.settings.device,
+                    candidate_index + 1,
+                    attempt + 1,
+                )
+                video_pipe = load_pipelines(
+                    model_name,
+                    generation_context_key,
+                    skip_image_pipeline=True,
+                    device_override=self.settings.device,
+                )["video"]
+                logger.info(
+                    "candidate_staged generating video candidate=%s attempt=%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                )
+                frames = self._generate_video_frames(
+                    video_pipe,
+                    initial_frame,
+                    parameters,
+                    video_steps,
+                    model_name=spec_name,
+                    generation_context=generation_context,
+                )
+                logger.info(
+                    "candidate_staged video ready candidate=%s attempt=%s frames=%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                    len(frames),
+                )
+                routing_summary = self._build_routing_summary(
+                    generation_context=generation_context,
+                    parameters=parameters,
+                    image_pipe=image_pipe,
+                    video_pipe=video_pipe,
+                )
+                preview_path = output_dir / f"candidate-{candidate_index + 1}.png"
+                video_path = output_dir / f"candidate-{candidate_index + 1}.mp4"
+                self.writer.write_image(preview_path, initial_frame)
+                self.writer.write_video(video_path, frames, fps=parameters.fps)
+                evaluation = self.scorer.evaluate(
+                    prompt_bundle=prompt_bundle,
+                    parameters=parameters,
+                    used_reference_image=reference_image_path is not None,
+                    candidate_index=candidate_index,
+                    initial_frame=initial_frame,
+                    frames=frames,
+                )
+                return {
+                    "candidate_index": candidate_index + 1,
+                    "score": evaluation["total_score"],
+                    "evaluation": evaluation,
+                    "preview_path": str(preview_path),
+                    "video_path": str(video_path),
+                    "seed": candidate_seed + attempt,
+                    "attempts_used": attempt + 1,
+                    "routing_summary": routing_summary,
+                }
+            except Exception as exc:
+                logger.exception(
+                    "candidate_staged failed candidate=%s attempt=%s",
+                    candidate_index + 1,
+                    attempt + 1,
+                )
+                last_error = str(exc)
+            finally:
+                clear_pipeline_cache()
+        raise RuntimeError(
+            f"Candidate {candidate_index + 1} failed after {parameters.retry_attempts} attempts: {last_error}"
+        )
 
     def _render_candidate(
         self,
@@ -301,6 +488,7 @@ class VideoPipeline:
         reference_image_path: str | None,
         seed: int | None = None,
         generation_context: GenerationContext | None = None,
+        generator_device: str | None = None,
     ) -> Image.Image:
         if reference_image_path:
             reference = self.reference_images.load(reference_image_path, parameters.width, parameters.height)
@@ -312,6 +500,7 @@ class VideoPipeline:
                 image_steps=image_steps,
                 seed=seed,
                 generation_context=generation_context,
+                generator_device=generator_device,
             )
         return self._generate_initial_frame(
             image_pipe,
@@ -320,6 +509,7 @@ class VideoPipeline:
             image_steps,
             seed,
             generation_context=generation_context,
+            generator_device=generator_device,
         )
 
     def _generate_initial_frame(
@@ -330,6 +520,7 @@ class VideoPipeline:
         image_steps: int,
         seed: int | None = None,
         generation_context: GenerationContext | None = None,
+        generator_device: str | None = None,
     ) -> Image.Image:
         prompt = self._compose_positive_prompt(prompt_bundle, generation_context)
         routing = self.condition_router.build(
@@ -346,7 +537,7 @@ class VideoPipeline:
             "num_inference_steps": image_steps,
         }
         self.condition_router.apply_image_branch(image_pipe, call_kwargs, routing)
-        generator = self._build_generator(seed)
+        generator = self._build_generator(seed, device_override=generator_device)
         if generator is not None:
             call_kwargs["generator"] = generator
         result = image_pipe(
@@ -364,6 +555,7 @@ class VideoPipeline:
         image_steps: int,
         seed: int | None,
         generation_context: GenerationContext | None = None,
+        generator_device: str | None = None,
     ) -> Image.Image:
         if parameters.reference_strength >= 0.99:
             return reference_image
@@ -376,6 +568,7 @@ class VideoPipeline:
             image_steps=image_steps,
             seed=seed,
             generation_context=generation_context,
+            generator_device=generator_device,
         )
         reference = reference_image.resize(generated.size).convert("RGB")
         generated = generated.convert("RGB")
@@ -435,14 +628,14 @@ class VideoPipeline:
         #8.后处理
         return self.condition_router.apply_video_postprocess(normalized, routing)
 
-    def _build_generator(self, seed: int | None) -> Any:
+    def _build_generator(self, seed: int | None, device_override: str | None = None) -> Any:
         if seed is None:
             return None
         try:
             import torch
         except ImportError:
             return None
-        device = "cuda" if self.settings.device == "cuda" else "cpu"
+        device = device_override or ("cuda" if self.settings.device == "cuda" else "cpu")
         return torch.Generator(device=device).manual_seed(seed)
 
     def _collect_rejection_reason_counts(self, candidates: list[dict[str, Any]]) -> dict[str, int]:
